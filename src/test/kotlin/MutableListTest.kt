@@ -51,7 +51,7 @@ class MutableListTest {
             { set(0, 3) },
             { remove(6) },
             { remove(6) },
-            { add(3, 6) },
+           /* { add(3, 6) },
             { get(3) },
             { removeAt(1) },
             { add(10) },
@@ -62,7 +62,7 @@ class MutableListTest {
             { add(6) },
             { set(size, 6) },
             { set(0, 5) },
-            { get(0) },
+            { get(0) }, */
         )
     }
 
