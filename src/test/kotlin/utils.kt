@@ -23,7 +23,7 @@ val mapImpl = when (System.getProperty("mapUnderTest")) {
     else -> MapImpl.ORACLE
 }
 
-inline fun <reified K, reified V> runMapWithOracle(
+inline fun <reified K : Comparable<K>, reified V> runMapWithOracle(
     initial: List<Pair<K, V>>,
     vararg operations: MapOperation<K, V, *>
 ) = runMapWithOracle(
@@ -32,22 +32,22 @@ inline fun <reified K, reified V> runMapWithOracle(
     operations = operations
 )
 
-inline fun <reified K, reified V> runMapWithOracle(
+inline fun <reified K : Comparable<K>, reified V> runMapWithOracle(
     initial: List<Pair<K, V>>,
     mapUnderTest: MapImpl,
     vararg operations: MapOperation<K, V, *>
 ) = runMapWithOracle(
     oracle = mutableMapOf(*initial.toTypedArray()),
-    listUnderTest = buildMap(*initial.toTypedArray(), mapUnderTest = mapUnderTest),
+    mapUnderTest = buildMap(*initial.toTypedArray(), mapUnderTest = mapUnderTest),
     operations = operations
 )
 
 fun <K, V> runMapWithOracle(
     oracle: MutableMap<K, V>,
-    listUnderTest: MutableMap<K, V>,
+    mapUnderTest: MutableMap<K, V>,
     vararg operations: MapOperation<K, V, *>
 ) {
-    assertEqualsMap(oracle, listUnderTest)
+    assertEqualsMap(oracle, mapUnderTest)
     for ((index, operation) in operations.withIndex()) {
         val oracleResult = try {
             oracle.operation()
@@ -56,19 +56,19 @@ fun <K, V> runMapWithOracle(
         }
         val testResult = if (oracleResult is ErrorMessage) {
             try {
-                listUnderTest.operation()
+                mapUnderTest.operation()
             } catch (e: Throwable) {
                 ErrorMessage(e.message)
             }
         } else {
-            listUnderTest.operation()
+            mapUnderTest.operation()
         }
         assertEquals(oracleResult, testResult, "operation@[$index]: Return value mismatch")
-        assertEqualsMap(oracle, listUnderTest, "operation@[$index]: Resulting map is not equal to the oracle")
+        assertEqualsMap(oracle, mapUnderTest, "operation@[$index]: Resulting map is not equal to the oracle")
     }
 }
 
-fun <K, V> buildMap(vararg pairs: Pair<K, V>, mapUnderTest: MapImpl): MutableMap<K, V> {
+fun <K : Comparable<K>, V> buildMap(vararg pairs: Pair<K, V>, mapUnderTest: MapImpl): MutableMap<K, V> {
     return when (mapUnderTest) {
         MapImpl.HASH -> HashMap.from(*pairs).also {
             assertEqualsMap(pairs.toMap(), it, "Constructed map is not equal to the expected map")

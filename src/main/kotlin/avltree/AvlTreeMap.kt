@@ -1,7 +1,7 @@
 package org.jetbrains.kotlin.avltree
 
 /**
- * Max points: 9
+ * Max points: 8
  */
 class AvlTreeMap<K, V> : MutableMap<K, V> {
     /* TODO */
@@ -18,7 +18,11 @@ class AvlTreeMap<K, V> : MutableMap<K, V> {
         get() = TODO("Not yet implemented")
 
     companion object {
-        fun <K, V> from(vararg pairs: Pair<K, V>): AvlTreeMap<K, V> {
+        fun <K : Comparable<K>, V> from(vararg pairs: Pair<K, V>): AvlTreeMap<K, V> {
+            TODO("Not yet implemented")
+        }
+
+        fun <K, V> from(vararg pairs: Pair<K, V>, comparator: Comparator<K>): AvlTreeMap<K, V> {
             TODO("Not yet implemented")
         }
     }

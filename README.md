@@ -17,10 +17,12 @@ Implement a two-way linked list that conforms to the `MutableList<T>` interface.
 
 ### Complexity requirements:
 
-- All operations except `size`, `isEmpty`, `clear`: O(n)
 - `size`, `isEmpty`, `clear`: O(1)
-- `addAll`: O(n + k) where n is the number of elements in the list and k is the number of elements to add
-- Space in memory: O(n)
+- `addAll`, `containsAll`: O(n + k) where n is the number of elements in the list and k is the number of elements to add
+- All other operations: O(n)
+- Space in memory for the list itself: O(n)
+- Additional space in memory for `addAll`, `containsAll`: O(k)
+- Additional space in memory for other operations: O(1)
 
 ### Running tests:
 

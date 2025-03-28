@@ -1,4 +1,4 @@
-import org.gradle.internal.impldep.org.bouncycastle.util.test.TestFailedException
+import java.util.*
 
 plugins {
     kotlin("jvm") version "2.1.10"
@@ -15,7 +15,11 @@ dependencies {
     testImplementation(kotlin("test"))
 }
 
+private fun Double.format() = String.format(Locale.ENGLISH, "%.2f", this)
+
 abstract class RunTestsWithTag : Test() {
+    private fun Double.format() = String.format(Locale.ENGLISH, "%.2f", this)
+
     @get:Input
     var tagName: String = ""
 
@@ -39,7 +43,7 @@ abstract class RunTestsWithTag : Test() {
                     val earnedPoints = points * fraction
 
                     println("Finished running ${result.testCount} tests (${result.successfulTestCount} successful, ${result.failedTestCount} failed, ${result.skippedTestCount} skipped)")
-                    println("Points earned: $earnedPoints/$points")
+                    println("Points earned: ${earnedPoints.format()}/${points.format()}")
 
                     // Store earned points in task's extra property
                     project.extra["points_$tagName"] = earnedPoints
@@ -101,9 +105,9 @@ fun registerTagGroupTask(
         dependsOn(testTasks)
 
         doLast {
-            val totalPoints = filteredTagGroup.keys.sumOf { project.extra["points_$it"] as? Double ?: 0f.toDouble() }
+            val totalPoints = filteredTagGroup.keys.sumOf { project.extra["points_$it"] as? Double ?: .0 }
             val expectedPoints = filteredTagGroup.values.sum()
-            val resultNote = "===== Total correctness points for ${className}: $totalPoints/$expectedPoints ====="
+            val resultNote = "===== Total correctness points for ${className}: ${totalPoints.format()}/${expectedPoints.format()} ====="
             println(
                 """
                 ${"=".repeat(resultNote.length)}
@@ -113,7 +117,7 @@ fun registerTagGroupTask(
             )
 
             if (totalPoints < expectedPoints) {
-                throw TestExecutionException("Total correctness points for $className is less than expected: $totalPoints/$expectedPoints")
+                throw TestExecutionException("Total correctness points for $className is less than expected: ${totalPoints.format()}/${expectedPoints.format()}")
             }
         }
     }
