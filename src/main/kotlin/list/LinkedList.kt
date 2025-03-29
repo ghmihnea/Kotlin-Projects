@@ -3,82 +3,234 @@ package org.jetbrains.kotlin.list
 /**
  * Max points: 4
  */
-class LinkedList<T>(/* TODO */) : MutableList<T> {
-    /* TODO */
+class LinkedList<T> : MutableList<T> {
+
+    private var head: LinkedListNode<T>? = null
+    private var tail: LinkedListNode<T>? = null
+    private var length = 0
+
+    class BrokenInvariantException(message: String) : RuntimeException(message)
 
     // =========== Task L1 ===========
 
     override val size: Int
-        get() = TODO("Not yet implemented")
+        get() = length
 
     companion object {
         fun <T> from(vararg elements: T): LinkedList<T> {
-            TODO("Not yet implemented")
+            val list = LinkedList<T>()
+            list.addAll(elements.toList())
+            return list
         }
     }
 
     override fun get(index: Int): T {
-        TODO("Not yet implemented")
+        if (index < 0 || index >= size) throw IndexOutOfBoundsException("Index $index out of bounds for length $length")
+        var currentNode = head
+        for (i in 0 until index) {
+            currentNode = currentNode?.next
+        }
+        return currentNode?.data ?: throw BrokenInvariantException("Failed to get element at index $index")
     }
 
     override fun set(index: Int, element: T): T {
-        TODO("Not yet implemented")
+        if (index < 0 || index >= size) throw IndexOutOfBoundsException("Index $index out of bounds for length $length")
+        var currentNode = head
+        for (i in 0 until index) {
+            currentNode = currentNode?.next
+        }
+        val oldValue = currentNode?.data ?: throw BrokenInvariantException("Failed to get element at index $index")
+        currentNode.data = element
+        return oldValue
     }
 
-    override fun isEmpty(): Boolean {
-        TODO("Not yet implemented")
-    }
+    override fun isEmpty(): Boolean = length == 0
 
     override fun addAll(elements: Collection<T>): Boolean {
-        TODO("Not yet implemented")
+        var added = false
+        for (element in elements) {
+            add(element)
+            added = true
+        }
+        return added
     }
 
     override fun addAll(index: Int, elements: Collection<T>): Boolean {
-        TODO("Not yet implemented")
+        if (index < 0 || index > size) throw IndexOutOfBoundsException()
+
+        var currentNode = head
+        var currentI = 0
+
+        while (currentNode !=null && currentI < index) {
+            currentNode = currentNode.next
+            currentI++
+        }
+
+        for (element in elements) {
+            val newNode = LinkedListNode(element)
+
+            if (currentNode == null) {
+                if (tail == null) {
+                    head = newNode
+                    tail = newNode
+                } else {
+                    tail?.next = newNode
+                    newNode.prev = tail
+                    tail = newNode
+                }
+            } else {
+                newNode.next = currentNode
+                newNode.prev = currentNode.prev
+                currentNode.prev?.next = newNode
+                currentNode.prev = newNode
+
+                if (currentNode == head) {
+                    head = newNode
+                }
+            }
+            currentNode = newNode.next
+        }
+        length += elements.size
+
+        return true
     }
 
     override fun add(index: Int, element: T) {
-        TODO("Not yet implemented")
+        if (index < 0 || index > size) throw IndexOutOfBoundsException("Index: $index, Size: $size")
+        if (index == size) {
+            add(element)
+        } else {
+            var currentNode = head
+            for(i in 0 until index) {
+                currentNode = currentNode?.next
+            }
+            val newNode = LinkedListNode(element, currentNode, currentNode?.prev)
+            currentNode?.prev?.next = newNode
+            currentNode?.prev = newNode
+            if (index == 0) head = newNode
+            length++
+        }
     }
 
     override fun add(element: T): Boolean {
-        TODO("Not yet implemented")
+        val newNode = LinkedListNode(element)
+        if (tail == null) {
+            head = newNode
+            tail = newNode
+        } else {
+            tail?.next = newNode
+            newNode.prev = tail
+            tail = newNode
+        }
+        length++
+        return true
     }
 
     // =========== Task L2 ===========
 
     override fun removeAt(index: Int): T {
-        TODO("Not yet implemented")
+        if (index < 0 || index >= size) throw IndexOutOfBoundsException()
+        var currentNode = head
+        for (i in 0 until index) {
+            currentNode = currentNode?.next
+        }
+        val value = currentNode?.data ?: throw BrokenInvariantException("Failed to get element at index $index")
+
+        if (currentNode == head && currentNode == tail) {
+            head = null
+            tail = null
+        } else if (currentNode == head) {
+            head = currentNode.next
+            head?.prev = null
+        } else if (currentNode == tail) {
+            tail = currentNode.prev
+            tail?.next = null
+        } else {
+            currentNode.prev?.next = currentNode.next
+            currentNode.next?.prev = currentNode.prev
+        }
+
+        length--
+        return value
     }
 
     override fun remove(element: T): Boolean {
-        TODO("Not yet implemented")
+        var currentNode = head
+        while (currentNode != null) {
+            if (currentNode.data == element) {
+                if (currentNode.prev == null && currentNode.next == null) {
+                    head = null
+                    tail = null
+                } else if (currentNode == head) {
+                    head = currentNode.next
+                    head?.prev = null
+                } else if (currentNode == tail) {
+                    tail = currentNode.prev
+                    tail?.next = null
+                } else {
+                    currentNode.prev?.next = currentNode.next
+                    currentNode.next?.prev = currentNode.prev
+                }
+                length--
+                return true
+            }
+            currentNode = currentNode.next
+        }
+        return false
     }
 
     override fun removeAll(elements: Collection<T>): Boolean {
-        TODO("Not yet implemented")
+        var removed = false
+        for (element in elements) {
+            removed = remove(element) || removed
+        }
+        return removed
     }
 
     override fun clear() {
-        TODO("Not yet implemented")
+        head = null
+        tail = null
+        length = 0
     }
 
     // =========== Task L3 ===========
 
     override fun lastIndexOf(element: T): Int {
-        TODO("Not yet implemented")
+        var currentNode = tail
+        var i = length - 1
+        while (currentNode != null) {
+            if (currentNode.data == element) return i
+            currentNode = currentNode.prev
+            i --
+        }
+        return -1
     }
 
     override fun indexOf(element: T): Int {
-        TODO("Not yet implemented")
+        var currentNode = head
+        var i = 0
+        while (currentNode != null) {
+            if (currentNode.data == element) return i
+            currentNode = currentNode.next
+            i++
+        }
+        return -1
     }
 
     override fun containsAll(elements: Collection<T>): Boolean {
-        TODO("Not yet implemented")
+        for (element in elements) {
+            if (!contains(element)) return false
+        }
+        return true
     }
 
     override fun contains(element: T): Boolean {
-        TODO("Not yet implemented")
+        var currentNode = head
+        while (currentNode != null) {
+            if (currentNode.data == element) return true
+            currentNode = currentNode.next
+        }
+        return false
     }
 
     // ==========================================
