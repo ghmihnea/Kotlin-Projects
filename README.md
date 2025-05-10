@@ -64,8 +64,6 @@ which you have to implement.
 
 25% for CLI.
 
-**If you have two red builds, you will receive half of the available points.**
-
 To run the tests you could use predefined run configurations or run them manually:
 
 **NOTE**: Wikipedia pages get updated more frequently than tests to this task, so 
