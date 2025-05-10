@@ -35,7 +35,7 @@ internal class ParsingTest {
                     "https://en.wikipedia.org/wiki/Java_Community_Process",
                     "https://en.wikipedia.org/wiki/JetBrains",
                 ),
-                223
+                229
             ),
         )
     }
