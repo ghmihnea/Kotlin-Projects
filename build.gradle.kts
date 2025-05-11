@@ -7,7 +7,7 @@ plugins {
     application
 }
 
-group = "org.edu.jvm.languages"
+group = "org.jetbrains.edu.kotlin"
 version = "1.0-SNAPSHOT"
 
 repositories {
