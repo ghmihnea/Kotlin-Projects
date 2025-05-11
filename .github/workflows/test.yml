@@ -1,0 +1,91 @@
+name: Build & Test
+
+on: [pull_request, workflow_dispatch]
+
+concurrency:
+  group: tests
+  cancel-in-progress: true
+
+jobs:
+  detekt:
+    runs-on: ubuntu-latest
+    if: ${{ github.triggering_actor != 'github-classroom[bot]' }}
+    timeout-minutes: 5
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Java
+        uses: actions/setup-java@v4
+        with:
+          java-version: 21
+          distribution: corretto
+
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: 8.12.1
+          cache-read-only: false
+
+      - name: Gradle Wrapper Validation
+        uses: gradle/actions/wrapper-validation@v4
+
+      - name: Run detekt
+        run: ./gradlew detekt --stacktrace
+
+  diktat:
+    needs: detekt
+    runs-on: ubuntu-latest
+    if: ${{ github.triggering_actor != 'github-classroom[bot]' }}
+    timeout-minutes: 5
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Java
+        uses: actions/setup-java@v4
+        with:
+          java-version: 21
+          distribution: corretto
+
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: 8.12.1
+          cache-read-only: false
+
+      - name: Gradle Wrapper Validation
+        uses: gradle/actions/wrapper-validation@v4
+
+      - name: Run diktat
+        run: ./gradlew diktat --stacktrace
+
+  tests:
+    needs: diktat
+    runs-on: ubuntu-latest
+    if: ${{ github.triggering_actor != 'github-classroom[bot]' }}
+    timeout-minutes: 5
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Java
+        uses: actions/setup-java@v4
+        with:
+          java-version: 21
+          distribution: corretto
+
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: 8.12.1
+          cache-read-only: false
+
+      - name: Gradle Wrapper Validation
+        uses: gradle/actions/wrapper-validation@v4
+
+      - name: Run tests
+        run: ./gradlew test --stacktrace
