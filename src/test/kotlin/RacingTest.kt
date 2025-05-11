@@ -21,11 +21,11 @@ class RacingTest {
     }
 
     companion object {
-        private const val AVL_PAGE = "https://en.wikipedia.org/wiki/AVL_tree"
-        private const val COMPARISON_PAGE = "https://en.wikipedia.org/wiki/Comparison_of_programming_languages"
-        private const val JETBRAINS_PAGE = "https://en.wikipedia.org/wiki/JetBrains"
-        private const val JVM_PAGE = "https://en.wikipedia.org/wiki/Java_virtual_machine"
-        private const val KOTLIN_PAGE = "https://en.wikipedia.org/wiki/Kotlin_(programming_language)"
+        private const val AVL_PAGE = "AVL_tree"
+        private const val COMPARISON_PAGE = "Comparison_of_programming_languages"
+        private const val JETBRAINS_PAGE = "JetBrains"
+        private const val JVM_PAGE = "Java_virtual_machine"
+        private const val KOTLIN_PAGE = "Kotlin_(programming_language)"
 
         @JvmStatic
         fun searchTestData() = listOf(
@@ -33,8 +33,8 @@ class RacingTest {
             Arguments.of(1, COMPARISON_PAGE, listOf(COMPARISON_PAGE, KOTLIN_PAGE)),
             Arguments.of(1, JETBRAINS_PAGE, listOf(JETBRAINS_PAGE, KOTLIN_PAGE)),
             Arguments.of(1, JVM_PAGE, listOf(JVM_PAGE, KOTLIN_PAGE)),
-            Arguments.of(2, AVL_PAGE, listOf(AVL_PAGE, "https://en.wikipedia.org/wiki/Tail_call", KOTLIN_PAGE)),
-            Arguments.of(WikiPath.NOT_FOUND.steps, "https://en.wikipedia.org/wiki/Bremen", WikiPath.NOT_FOUND.path),
+            Arguments.of(2, AVL_PAGE, listOf(AVL_PAGE, "Tail_call", KOTLIN_PAGE)),
+            Arguments.of(WikiPath.NOT_FOUND.steps, "Bremen", WikiPath.NOT_FOUND.path),
         )
     }
 }
