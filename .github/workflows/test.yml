@@ -28,9 +28,6 @@ jobs:
           gradle-version: 8.12.1
           cache-read-only: false
 
-      - name: Gradle Wrapper Validation
-        uses: gradle/actions/wrapper-validation@v4
-
       - name: Run detekt
         run: ./gradlew detekt --stacktrace
 
@@ -56,9 +53,6 @@ jobs:
           gradle-version: 8.12.1
           cache-read-only: false
 
-      - name: Gradle Wrapper Validation
-        uses: gradle/actions/wrapper-validation@v4
-
       - name: Run diktat
         run: ./gradlew diktat --stacktrace
 
@@ -83,9 +77,6 @@ jobs:
         with:
           gradle-version: 8.12.1
           cache-read-only: false
-
-      - name: Gradle Wrapper Validation
-        uses: gradle/actions/wrapper-validation@v4
 
       - name: Run tests
         run: ./gradlew test --stacktrace
