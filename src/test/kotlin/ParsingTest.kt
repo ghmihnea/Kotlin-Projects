@@ -31,11 +31,11 @@ internal class ParsingTest {
             Arguments.of(
                 "Kotlin (programming language)",
                 listOf(
-                    "James Gosling",
-                    "Java Community Process",
+                    "James_Gosling",
+                    "Java_Community_Process",
                     "JetBrains",
                 ),
-                229
+                230
             ),
         )
     }

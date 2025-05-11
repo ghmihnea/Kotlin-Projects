@@ -13,7 +13,7 @@ class RacingTest {
         assertEquals(expectedPathSize, searchResult.steps, "From $startPage to $KOTLIN_PAGE $expectedPathSize steps")
         expectedPath.zip(searchResult.path).forEachIndexed { index, (expected, actual) ->
             assertEquals(
-                expected,
+                expected.replace(' ', '_'),
                 actual,
                 "The $index-th item in the path from $startPage to $KOTLIN_PAGE is $expected, but was $actual"
             )
@@ -26,6 +26,7 @@ class RacingTest {
         private const val JETBRAINS_PAGE = "JetBrains"
         private const val JVM_PAGE = "Java virtual machine"
         private const val KOTLIN_PAGE = "Kotlin (programming language)"
+        private const val BREMEN_PAGE = "Bremen"
 
         @JvmStatic
         fun searchTestData() = listOf(
@@ -34,7 +35,7 @@ class RacingTest {
             Arguments.of(1, JETBRAINS_PAGE, listOf(JETBRAINS_PAGE, KOTLIN_PAGE)),
             Arguments.of(1, JVM_PAGE, listOf(JVM_PAGE, KOTLIN_PAGE)),
             Arguments.of(2, AVL_PAGE, listOf(AVL_PAGE, "Tail_call", KOTLIN_PAGE)),
-            Arguments.of(WikiPath.NOT_FOUND.steps, "Bremen", WikiPath.NOT_FOUND.path),
+            Arguments.of(WikiPath.NOT_FOUND.steps, BREMEN_PAGE, WikiPath.NOT_FOUND.path),
         )
     }
 }
