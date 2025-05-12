@@ -24,18 +24,18 @@ internal class ParsingTest {
         @JvmStatic
         fun referencesData() = listOf(
             Arguments.of(
-                "https://en.wikipedia.org/wiki/Kotlin_(programming_language)aaaaa",
+                "Kotlin (programming language) aaaaa",
                 emptyList<String>(),
                 0,
             ),
             Arguments.of(
-                "https://en.wikipedia.org/wiki/Kotlin_(programming_language)",
+                "Kotlin (programming language)",
                 listOf(
-                    "https://en.wikipedia.org/wiki/James_Gosling",
-                    "https://en.wikipedia.org/wiki/Java_Community_Process",
-                    "https://en.wikipedia.org/wiki/JetBrains",
+                    "James_Gosling",
+                    "Java_Community_Process",
+                    "JetBrains",
                 ),
-                229
+                230
             ),
         )
     }

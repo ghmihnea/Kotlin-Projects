@@ -1,1 +1,1 @@
-rootProject.name = "kotlin-test-parallel-concurrent"
+rootProject.name = "WikiRacing"
