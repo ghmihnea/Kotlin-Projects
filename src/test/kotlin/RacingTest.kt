@@ -22,11 +22,11 @@ class RacingTest {
 
     companion object {
         private const val AVL_PAGE = "AVL tree"
+        private const val BREMEN_PAGE = "Bremen"
         private const val COMPARISON_PAGE = "Comparison of programming languages"
         private const val JETBRAINS_PAGE = "JetBrains"
         private const val JVM_PAGE = "Java virtual machine"
         private const val KOTLIN_PAGE = "Kotlin (programming language)"
-        private const val BREMEN_PAGE = "Bremen"
 
         @JvmStatic
         fun searchTestData() = listOf(
