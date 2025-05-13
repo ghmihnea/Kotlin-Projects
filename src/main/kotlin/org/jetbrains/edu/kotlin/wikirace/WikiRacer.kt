@@ -11,7 +11,9 @@ interface WikiRacer {
 
     /**
      * Returns a list of all wikipedia articles references from the given page.
-     * Remember to create the full link, e.g. `JetBrains -> https://en.wikipedia.org/wiki/JetBrains`
+     * Remember to create the full link, e.g. `JetBrains -> https://en.wikipedia.org/wiki/JetBrains`.
+     * You will need to remove the anchor from URLs (everything after and including the `#` symbol).
+     * Only unique references should be returned — no duplicates.
      *
      * @param page Wikipedia page
      *
