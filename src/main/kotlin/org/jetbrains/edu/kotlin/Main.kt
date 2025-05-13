@@ -7,7 +7,9 @@ fun main(args: Array<String>) {
     val argsMap = args.toList().windowed(2, 2).associate { it[0] to it[1] }
 
     val depth = argsMap["--search-depth"]?.toIntOrNull()
+
     val threads = argsMap["--max-threads"]?.toIntOrNull() ?: 1
+
     val start = argsMap["--start"]
     val end = argsMap["--final"]
 

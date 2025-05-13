@@ -1,6 +1,7 @@
 package org.jetbrains.edu.kotlin.wikirace
 
 import org.jsoup.Jsoup
+import java.util.concurrent.*
 
 interface WikiRacer {
     /**
@@ -66,7 +67,7 @@ interface WikiRacer {
                                     !link.contains('#') &&
                                     forbiddenPrefixes.none { link.startsWith(it) }
                                 ) link else null
-                            }
+                            }.distinct()
                     } catch (ex: Exception) {
                         println("Error fetching $fullUrl: ${ex.message}")
                         emptyList()
@@ -76,26 +77,53 @@ interface WikiRacer {
                     if (startPage == destinationPage) return WikiPath(listOf(startPage))
                     if (searchDepth <= 0) return WikiPath.NOT_FOUND
 
-                    val visited = mutableSetOf<String>()
-                    val toVisitQueue = ArrayDeque<Pair<String, List<String>>>()
+                    val visited = ConcurrentHashMap.newKeySet<String>()
+                    val toVisitQueue = ConcurrentLinkedQueue<Pair<String, List<String>>>()
+                    val executor = Executors.newFixedThreadPool(maxThreads)
 
                     toVisitQueue.add(startPage to listOf(startPage))
                     visited.add(startPage)
 
-                    while (toVisitQueue.isNotEmpty()) {
-                        val (currentPage, pathSoFar) = toVisitQueue.removeFirst()
-                        if (pathSoFar.size > searchDepth + 1) continue
+                    for(depth in 1..searchDepth) {
+                        val nextLevel = ConcurrentLinkedQueue<Pair<String, List<String>>>()
+                        val tasks = mutableListOf<Callable<WikiPath?>>()
 
-                        val links = getReferences(currentPage)
-                        for (link in links) {
-                            if (link == destinationPage) return WikiPath(pathSoFar + link)
-                            if (link !in visited) {
-                                visited.add(link)
-                            toVisitQueue.add(link to (pathSoFar + link))
-                            }
+                        while (toVisitQueue.isNotEmpty()) {
+                            val (currentPage, path) = toVisitQueue.poll()
+
+                            tasks.add(Callable {
+                                val references = getReferences(currentPage)
+                                for (link in references) {
+                                    if (link == destinationPage) {
+                                        return@Callable WikiPath(path + link)
+                                    }
+                                    if (visited.add(link)) {
+                                        nextLevel.add(link to (path + link))
+                                    }
+                                }
+                                null
+                            })
                         }
+
+                        try {
+                            val results = executor.invokeAll(tasks)
+                            for (result in results) {
+                                val path = result.get()
+                                if (path != null) {
+                                    executor.shutdownNow()
+                                    return path
+                                }
+                            }
+                        } catch (e: InterruptedException) {
+                            println("Search interrupted: ${e.message}")
+                            break
+                        }
+
+                        toVisitQueue.addAll(nextLevel)
+                        println("Depth $depth: Visited ${visited.size} pages...")
                     }
 
+                    executor.shutdown()
                     return WikiPath.NOT_FOUND
                 }
             }
