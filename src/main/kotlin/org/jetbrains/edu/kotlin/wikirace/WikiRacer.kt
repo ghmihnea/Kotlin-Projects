@@ -72,22 +72,25 @@ interface WikiRacer {
                                     link != "Main_Page" &&
                                     forbiddenPrefixes.none { link.startsWith(it) }
                                 ) link else null
-                            }.distinct().also {it.forEach { link -> println(link) }}
+                            }.distinct()
                     } catch (ex: Exception) {
                         println("Error fetching $fullUrl: ${ex.message}")
                         emptyList()
                     }
                 }
                 override fun race(startPage: String, destinationPage: String, searchDepth: Int): WikiPath {
-                    if (startPage == destinationPage) return WikiPath(listOf(startPage))
+                    val start = startPage.replace(' ', '_')
+                    val end = destinationPage.replace(' ', '_')
+
+                    if (start == end) return WikiPath(listOf(start))
                     if (searchDepth <= 0) return WikiPath.NOT_FOUND
 
                     val visited = ConcurrentHashMap.newKeySet<String>()
                     val toVisitQueue = ConcurrentLinkedQueue<Pair<String, List<String>>>()
                     val executor = Executors.newFixedThreadPool(maxThreads)
 
-                    toVisitQueue.add(startPage to listOf(startPage))
-                    visited.add(startPage)
+                    toVisitQueue.add(start to listOf(start))
+                    visited.add(start)
 
                     for(depth in 1..searchDepth) {
                         val nextLevel = ConcurrentLinkedQueue<Pair<String, List<String>>>()
@@ -99,7 +102,7 @@ interface WikiRacer {
                             tasks.add(Callable {
                                 val references = getReferences(currentPage)
                                 for (link in references) {
-                                    if (link == destinationPage) {
+                                    if (link == end) {
                                         return@Callable WikiPath(path + link)
                                     }
                                     if (visited.add(link)) {
