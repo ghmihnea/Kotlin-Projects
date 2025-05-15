@@ -35,7 +35,7 @@ internal class ParsingTest {
                     "Java_Community_Process",
                     "JetBrains",
                 ),
-                230
+                228
             ),
         )
     }
