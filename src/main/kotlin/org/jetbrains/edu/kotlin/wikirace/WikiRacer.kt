@@ -61,15 +61,18 @@ interface WikiRacer {
                         println("Loaded page: $fullUrl")
 
 
-                        doc.select("#mw-content-text a[href^=\"/wiki/\"]")
+                        doc.select("[href^=/wiki/]")
                             .mapNotNull { element ->
                                 val link = element.attr("href").removePrefix("/wiki/")
+                                    .split('#')
+                                    .first()
                                 if (
                                     link.isNotBlank() &&
-                                    !link.contains('#') &&
+                                    link != formattedPage &&
+                                    link != "Main_Page" &&
                                     forbiddenPrefixes.none { link.startsWith(it) }
                                 ) link else null
-                            }.distinct()
+                            }.distinct().also {it.forEach { link -> println(link) }}
                     } catch (ex: Exception) {
                         println("Error fetching $fullUrl: ${ex.message}")
                         emptyList()
