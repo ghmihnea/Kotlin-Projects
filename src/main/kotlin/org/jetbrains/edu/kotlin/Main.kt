@@ -1,7 +1,7 @@
 package org.jetbrains.edu.kotlin
 
-import org.jetbrains.edu.kotlin.wikirace.WikiRacer
 import org.jetbrains.edu.kotlin.wikirace.WikiPath
+import org.jetbrains.edu.kotlin.wikirace.WikiRacer
 
 fun main(args: Array<String>) {
     val argsMap = args.toList().windowed(2, 2).associate { it[0] to it[1] }
