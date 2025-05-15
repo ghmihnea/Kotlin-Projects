@@ -28,11 +28,11 @@ jobs:
           gradle-version: 8.12.1
           cache-read-only: false
 
-      # - name: Run detekt
-      #   run: ./gradlew detekt --stacktrace
-      #
-      # - name: Run diktat
-      #   run: ./gradlew diktat --stacktrace
+      - name: Run detekt
+        run: ./gradlew detekt --stacktrace
+
+      - name: Run diktat
+        run: ./gradlew diktat --stacktrace
 
       - name: Run tests
         run: ./gradlew test --stacktrace
