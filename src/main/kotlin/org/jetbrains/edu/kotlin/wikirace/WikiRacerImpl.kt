@@ -43,7 +43,6 @@ class WikiRacerImpl(private val maxThreads: Int) : WikiRacer {
                         .split('#')
                         .first()
                     if (
-                        link.isNotBlank() &&
                         link != formattedPage &&
                         link != "Main_Page" &&
                         forbiddenPrefixes.none { link.startsWith(it) }
@@ -71,33 +70,14 @@ class WikiRacerImpl(private val maxThreads: Int) : WikiRacer {
 
         for (depth in 1..searchDepth) {
             val nextLevel = ConcurrentLinkedQueue<Pair<String, List<String>>>()
-            val tasks = mutableListOf<Callable<WikiPath?>>()
-
-            while (toVisitQueue.isNotEmpty()) {
-                val (currentPage, path) = toVisitQueue.poll()
-
-                tasks.add(Callable {
-                    val references = getReferences(currentPage)
-                    for (link in references) {
-                        if (link == end) {
-                            return@Callable WikiPath(path + link)
-                        }
-                        if (visited.add(link)) {
-                            nextLevel.add(link to (path + link))
-                        }
-                    }
-                    null
-                })
-            }
+            val tasks = buildSearchTasks(toVisitQueue, visited, nextLevel, end)
 
             try {
                 val results = executor.invokeAll(tasks)
                 for (result in results) {
-                    val path = result.get()
-                    if (path != null) {
-                        executor.shutdownNow()
-                        return path
-                    }
+                    val path = result.get() ?: continue
+                    executor.shutdownNow()
+                    return path
                 }
             } catch (e: InterruptedException) {
                 println("Search interrupted: ${e.message}")
@@ -110,5 +90,30 @@ class WikiRacerImpl(private val maxThreads: Int) : WikiRacer {
 
         executor.shutdown()
         return WikiPath.NOT_FOUND
+    }
+
+    private fun buildSearchTasks(
+        toVisitQueue: ConcurrentLinkedQueue<Pair<String, List<String>>>,
+        visited: MutableSet<String>,
+        nextLevel: ConcurrentLinkedQueue<Pair<String, List<String>>>,
+        destination: String
+    ): List<Callable<WikiPath?>> {
+        val tasks = mutableListOf<Callable<WikiPath?>>()
+
+        while (toVisitQueue.isNotEmpty()) {
+            val (currentPage, path) = toVisitQueue.poll()
+            tasks.add(Callable {
+                val references = getReferences(currentPage)
+                for (link in references) {
+                    if (link == destination) return@Callable WikiPath(path + link)
+                    if (visited.add(link)) {
+                        nextLevel.add(link to (path + link))
+                    }
+                }
+                null
+            })
+        }
+
+        return tasks
     }
 }
