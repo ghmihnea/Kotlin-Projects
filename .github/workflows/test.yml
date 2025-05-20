@@ -7,7 +7,7 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  build
+  build:
     runs-on: ubuntu-latest
     if: ${{ github.triggering_actor != 'github-classroom[bot]' }}
     timeout-minutes: 5
