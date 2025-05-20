@@ -196,7 +196,7 @@ class LinkedList<T> : MutableList<T> {
         while (currentNode != null) {
             val nextNode = currentNode.next
             if (currentNode.data in toRemove) {
-                removeNode(currentNode)  // reuse existing logic
+                removeNode(currentNode)
                 length--
                 removed = true
             }
