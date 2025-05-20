@@ -28,8 +28,11 @@ jobs:
           gradle-version: 8.12.1
           cache-read-only: false
 
-      - name: Test list
+      - name: Test LinkedList
         run: ./gradlew :testList
 
-      - name: Test map
+      - name: Test HashMap
         run: ./gradlew :testHashMap
+
+      - name: Test AvlTree
+        run: ./gradlew :testAvlMap
