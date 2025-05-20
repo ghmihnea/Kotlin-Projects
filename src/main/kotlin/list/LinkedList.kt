@@ -12,7 +12,6 @@ class LinkedList<T> : MutableList<T> {
     private var length = 0
 
     class BrokenInvariantException(message: String) : RuntimeException(message)
-    /*exception for handling cases when the list s unexpectedly broken*/
 
     // =========== Task L1 ===========
 
@@ -20,11 +19,10 @@ class LinkedList<T> : MutableList<T> {
         get() = length
 
     companion object
-    /*helper function to create LinkedList from vararg elements*/
     {
         fun <T> from(vararg elements: T): LinkedList<T> {
-            val list = LinkedList<T>()/*creating a new LinkedList instance*/
-            list.addAll(elements.toList())/*adding all elements to the list*/
+            val list = LinkedList<T>()
+            list.addAll(elements.toList())
             return list
         }
     }
@@ -52,11 +50,10 @@ class LinkedList<T> : MutableList<T> {
     override fun isEmpty(): Boolean = length == 0
 
     override fun addAll(elements: Collection<T>): Boolean
-    /*adding all elements from a collection to the list*/
     {
         var added = false
         for (element in elements) {
-            add(element)/*adding each element individually*/
+            add(element)
             added = true
         }
         return added
@@ -69,12 +66,11 @@ class LinkedList<T> : MutableList<T> {
         var currentI = 0
 
         while (currentNode !=null && currentI < index) {
-            currentNode = currentNode.next/*moving right before the specified index*/
+            currentNode = currentNode.next
             currentI++
         }
 
         for (element in elements)
-        /*inserting the new nodes*/
         {
             val newNode = LinkedListNode(element)
 
@@ -82,21 +78,17 @@ class LinkedList<T> : MutableList<T> {
                 if (tail == null) {
                     head = newNode
                     tail = newNode
-                    /*setting the new node as the head and tail
-                    if the list is empty*/
                 } else {
                     tail?.next = newNode
                     newNode.prev = tail
                     tail = newNode
                 }
             } else
-            /*if inserting randomly*/
             {
                 newNode.next = currentNode
                 newNode.prev = currentNode.prev
                 currentNode.prev?.next = newNode
                 currentNode.prev = newNode
-                /*we interlink the current node with the new one*/
 
                 if (currentNode == head) {
                     head = newNode
@@ -110,12 +102,10 @@ class LinkedList<T> : MutableList<T> {
     }
 
     override fun add(index: Int, element: T)
-    /*adds an element at a specific index*/
     {
         if (index < 0 || index > size) throw IndexOutOfBoundsException("Index: $index, Size: $size")
         if (index == size) {
             add(element)
-            /*add at the end of the list*/
         } else {
             var currentNode = head
             for(i in 0 until index) {
@@ -130,7 +120,6 @@ class LinkedList<T> : MutableList<T> {
     }
 
     override fun add(element: T): Boolean
-    /*adds an element at the end of the list*/
     {
         val newNode = LinkedListNode(element)
         if (tail == null) {
@@ -148,8 +137,6 @@ class LinkedList<T> : MutableList<T> {
     // =========== Task L2 ===========
 
     private fun removeNode(node: LinkedListNode<T>?)
-    /*helper function introduced to improve readability for
-    removeAt and remove*/
     {
         if (node == null) return
 
@@ -172,7 +159,6 @@ class LinkedList<T> : MutableList<T> {
         var currentNode = head
         for (i in 0 until index) {
             currentNode = currentNode?.next
-            /*go through the list until reaching the specified index*/
         }
         val value = currentNode?.data ?: throw BrokenInvariantException("Failed to get element at index $index")
 
@@ -182,7 +168,6 @@ class LinkedList<T> : MutableList<T> {
         return value
     }
     override fun remove(element: T): Boolean
-    /*removes the first occurrence of a specified element*/
     {
         var currentNode = head
         var removed = false
@@ -201,36 +186,18 @@ class LinkedList<T> : MutableList<T> {
     }
 
     override fun removeAll(elements: Collection<T>): Boolean {
-        /*removes all occurrences of the elements in the given collection*/
-        if(isEmpty()) return false
+        if (isEmpty()) return false
 
         val toRemove = elements.toSet()
-        /*converting the collection to a set for a faster lookup
-        during comparison*/
+
         var currentNode = head
         var removed = false
 
         while (currentNode != null) {
             val nextNode = currentNode.next
-            if(currentNode.data in toRemove) {
-                if(currentNode == head) {
-                    head = nextNode
-                    head?.prev = null
-                } else {
-                    currentNode.prev?.next = nextNode
-                    /*skipping the current node by linking
-                   the previous node to the next one*/
-                }
-                if(currentNode == tail) {
-                    tail = currentNode.prev
-                    tail?.next = null
-                } else {
-                    nextNode?.prev = currentNode.prev
-                    /*updating the next node's previous pointer
-                    to skip the current node*/
-                }
-
-                length --
+            if (currentNode.data in toRemove) {
+                removeNode(currentNode)  // reuse existing logic
+                length--
                 removed = true
             }
             currentNode = nextNode
@@ -249,9 +216,7 @@ class LinkedList<T> : MutableList<T> {
     override fun lastIndexOf(element: T): Int {
         var currentNode = tail
         var i = length - 1
-        /*initialize the index to the last position*/
         while (currentNode != null)
-        /*traversing the list backwards*/
         {
             if (currentNode.data == element) return i
             currentNode = currentNode.prev
@@ -274,7 +239,6 @@ class LinkedList<T> : MutableList<T> {
     override fun containsAll(elements: Collection<T>): Boolean {
         for (element in elements) {
             if (!contains(element)) return false
-            /*if any element is not found in the linked list, return false*/
         }
         return true
     }
