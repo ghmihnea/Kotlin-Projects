@@ -19,8 +19,6 @@ class AvlTreeMap<K, V> : MutableMap<K, V> {
         return comparator?.compare(k1, k2) ?: (k1 as Comparable<K>).compareTo(k2)
     }
 
-
-
     // =========== Task A1 ===========
 
     override val entries: MutableSet<MutableMap.MutableEntry<K, V>>
