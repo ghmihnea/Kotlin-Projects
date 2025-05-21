@@ -16,7 +16,14 @@ class AvlTreeMap<K, V> : MutableMap<K, V> {
     }
 
     private fun compare(k1: K, k2: K): Int {
-        return comparator?.compare(k1, k2) ?: (k1 as Comparable<K>).compareTo(k2)
+        return comparator?.compare(k1, k2)
+            ?: when {
+                k1 is Comparable<*> && k2 is Comparable<*> -> {
+                    @Suppress("UNCHECKED_CAST") // see below for how to remove this too
+                    (k1 as Comparable<Any>).compareTo(k2 as Any)
+                }
+                else -> throw IllegalStateException("Keys must be Comparable or a Comparator must be provided.")
+            }
     }
 
     // =========== Task A1 ===========
@@ -100,6 +107,7 @@ class AvlTreeMap<K, V> : MutableMap<K, V> {
     override fun remove(key: K): V? {
         var old: V? = null
         root = delete(root, key) { old = it }
+        if(old != null) _size--
         return old
     }
 
@@ -192,7 +200,6 @@ class AvlTreeMap<K, V> : MutableMap<K, V> {
             cmp > 0 -> node.right = delete(node.right, key, oldValue)
             else -> {
                 oldValue(node.value)
-                _size--
                 if (node.left == null) return node.right
                 if (node.right == null) return node.left
                 val min = minValueNode(node.right!!)
