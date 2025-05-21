@@ -16,15 +16,10 @@ class AvlTreeMap<K, V> : MutableMap<K, V> {
     }
 
     private fun compare(k1: K, k2: K): Int {
-        return comparator?.compare(k1, k2)
-            ?: when {
-                k1 is Comparable<*> && k2 is Comparable<*> -> {
-                    @Suppress("UNCHECKED_CAST") // see below for how to remove this too
-                    (k1 as Comparable<Any>).compareTo(k2 as Any)
-                }
-                else -> throw IllegalStateException("Keys must be Comparable or a Comparator must be provided.")
-            }
+        return comparator?.compare(k1, k2) ?: (k1 as Comparable<K>).compareTo(k2)
     }
+
+
 
     // =========== Task A1 ===========
 
