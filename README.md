@@ -1,5 +1,11 @@
 # Project: Long Arithmetic in Kotlin
 
+**Source Code Location:**  
+All source code is in the `app/src` folder:  
+- `app/src/main/kotlin/org/example` – contains the main project implementation  
+- `app/src/test/kotlin/org/example` – contains test cases for the project
+
+
 ## Description 
 - Implement a `BigInt` class that supports working with arbitrarily large integers (beyond `Long.MAX_VALUE`) without using Java’s built-in `BigInteger`.
 -  The class must support basic arithmetic operations, comparisons (with both `BigInt` and primitive types), and utility functions.
