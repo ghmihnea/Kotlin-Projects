@@ -11,3 +11,19 @@ Practice Exercises – Small tasks focused on learning Kotlin fundamentals.
 Projects – Larger applications that combine multiple concepts and techniques.
 
 Notes – Short explanations, experiments, and reflections from the learning process.
+
+# Topics I’ve Practiced
+
+Kotlin syntax, data types, and control flow
+
+Functions, object-oriented programming, and exception handling
+
+Collections, Generics, and lambda expressions
+
+Higher-order functions and extension functions
+
+Null safety and type inference
+
+Applying Kotlin to solve practical programming problems
+
+Exploring Kotlin for Android, web, and data science contexts
