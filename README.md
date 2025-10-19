@@ -1,5 +1,6 @@
 
 ## Overview
+> **Source Code:** All Kotlin code is located in the `src` folder, with `src/main` containing the main project code and `src/test` containing the test files.
 
 In this Project, you will implement a `LinkedList` and one of two maps: a `HashMap` with closed addressing or
 an `AvlTreeMap` (for advanced students, gives bonus points).
