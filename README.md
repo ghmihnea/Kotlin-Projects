@@ -1,5 +1,10 @@
 
 # Parallel & Concurrent Test
+**Source Code Location:**  
+All source code is in the `src` folder:  
+- `src/main/kotlin/org/jetbrains/edu/kotlin/wikirace` – contains the main project implementation including `WikiRacer` interface and other classes  
+- `src/main/kotlin/org/jetbrains/edu/kotlin/Main.kt` – main entry point  
+- `src/test/kotlin` – contains test cases for the project
 
 ## Task description
 
