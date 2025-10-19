@@ -166,4 +166,3 @@ Null safety and type inference
 Applying Kotlin to solve practical programming problems
 
 Exploring Kotlin for Android, web, and data science contexts
->>>>>>> a3acfa7249124e65ce6acfd154120a6224d494ea
