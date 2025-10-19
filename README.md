@@ -1,10 +1,7 @@
-<<<<<<< HEAD
-[![Review Assignment Due Date](https://classroom.github.com/assets/deadline-readme-button-22041afd0340ce965d47ae6ef1cefeee28c7c493a6346c4f15d667ab976d596c.svg)](https://classroom.github.com/a/usMI2_X2)
-# Homework Specification
 
 ## Overview
 
-In this assignment, you will implement a `LinkedList` and one of two maps: a `HashMap` with closed addressing or
+In this Project, you will implement a `LinkedList` and one of two maps: a `HashMap` with closed addressing or
 an `AvlTreeMap` (for advanced students, gives bonus points).
 
 ## Part 1. `LinkedList` (4 points)
