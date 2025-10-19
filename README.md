@@ -1,4 +1,4 @@
-# Homework: Long Arithmetic in Kotlin
+# Project: Long Arithmetic in Kotlin
 
 ## Description 
 - Implement a `BigInt` class that supports working with arbitrarily large integers (beyond `Long.MAX_VALUE`) without using Java’s built-in `BigInteger`.
