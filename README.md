@@ -54,16 +54,6 @@ val forbiddenPrefixes = listOf(
 )
 ```
 
-Read more in the javadoc of [WikiRacer](./src/main/kotlin/org/jetbrains/edu/kotlin/wikirace/WikiRacer.kt) interface, 
-which you have to implement.
-
-### Grades
-
-25% for passing tests, even if the implementation is synchronous. 
-
-50% for multithreaded version. You can use either threads or coroutines.
-
-25% for CLI.
 
 To run the tests you could use predefined run configurations or run them manually:
 
